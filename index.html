@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Sticky Notes</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -18,11 +19,12 @@
     </nav>
 
     <header class="header">
-        <h1>📝 My Sticky Notes</h1>
+        <h1>My Sticky Notes</h1>
     </header>
+
     <div class="actions">
         <button id="newNoteBtn">
-            + New Note
+            New Note
         </button>
         <input 
             type="text" 
@@ -30,6 +32,7 @@
             id="search"
         >
     </div>
+
     <div class="note-form" id="noteForm">
         <h2>New Note</h2>
         <input 
@@ -48,17 +51,20 @@
             <option value="green">Green 🟩</option>
         </select>
         <div class="form-buttons">
-            <button id="saveNoteBtn">
-                Save
-            </button>
-            <button id="closeBtn">
-                Cancel
-            </button>
+            <button id="saveNoteBtn">💾 Save</button>
+            <button id="closeBtn">❌ Cancel</button>
         </div>
     </div>
+
     <div class="container">
-        <div class="grid"></div>
+        <div class="grid" id="notesGrid">
+            <!-- Your JavaScript will dynamically insert .card elements here -->
+        </div>
     </div>
+
+    <footer class="footer">
+        <p>© 2026 My Sticky Notes. All rights reserved by Taher Abubaker.</p>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="script.js"></script>
