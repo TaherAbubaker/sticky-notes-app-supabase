@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Sticky Notes</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <nav class="nav">
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="login.html">Login</a></li>
+        </ul>
+    </nav>
+    <header class="header">
+        <h1>📝 My Sticky Notes</h1>
+    </header>
+      <div class="actions">
+        <button id="newNoteBtn">
+            + New Note
+        </button>
+        <input 
+            type="text" 
+            placeholder="Search notes..." 
+            id="search"
+        >
+    </div>
+    <div class="note-form" id="noteForm">
+        <h2>New Note</h2>
+        <input 
+            id="noteTitle" 
+            type="text" 
+            placeholder="Note title"
+        >
+        <textarea 
+            id="noteContent" 
+            placeholder="Write your note..."
+        ></textarea>
+        <select id="noteColor">
+            <option value="yellow">Yellow 🟨</option>
+            <option value="pink">Pink 🩷</option>
+            <option value="blue">Blue 🟦</option>
+            <option value="green">Green 🟩</option>
+        </select>
+        <div class="form-buttons">
+            <button id="saveNoteBtn">
+                Save
+            </button>
+            <button id="closeBtn">
+                Cancel
+            </button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="grid"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+</html>

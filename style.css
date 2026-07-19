@@ -1,0 +1,161 @@
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    padding:0;
+    font-family:Arial, sans-serif;
+    background:#f5f5f5;
+}
+
+
+.nav{
+    background:#000;
+}
+
+.nav ul{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+}
+
+.nav li a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px;
+}
+
+.nav li a:hover{
+    background:#303030;
+    color:#ff006e;
+}
+
+
+.header{
+    text-align:center;
+    padding:20px;
+}
+
+
+.actions{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin:20px;
+}
+
+
+button{
+    padding:10px 15px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+
+#newNoteBtn{
+    background:#000;
+    color:white;
+}
+
+
+#search{
+    padding:10px;
+    width:250px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+    padding:30px;
+}
+
+
+.card{
+    min-height:220px;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 10px 20px rgba(0,0,0,.15);
+    transition:.2s;
+}
+.card:hover{
+    transform:translateY(-5px) rotate(2deg);
+}
+.yellow{
+    background:#fff59d;
+}
+.pink{
+    background:#ffb6c1;
+}
+.blue{
+    background:#90caf9;
+}
+.green{
+    background:#a5d6a7;
+}
+.note-form{
+    display:none;
+    position:fixed;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+
+    width:320px;
+    padding:20px;
+
+    background:white;
+    border-radius:15px;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.3);
+
+    flex-direction:column;
+    gap:10px;
+
+    z-index:10;
+}
+.note-form input,
+.note-form textarea,
+.note-form select{
+
+    width:100%;
+    padding:10px;
+
+    border-radius:8px;
+    border:1px solid #ccc;
+
+}
+.note-form textarea{
+    height:100px;
+    resize:none;
+}
+.form-buttons{
+    display:flex;
+    justify-content:space-between;
+}
+#saveNoteBtn{
+    background:#000;
+    color:white;
+}
+#closeBtn{
+    background:#ddd;
+}
+.edit,
+.delete{
+
+    margin-top:15px;
+    margin-right:5px;
+
+    background:#000;
+    color:white;
+
+}
+.delete{
+    background:#d62828;
+}
