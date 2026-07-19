@@ -4,27 +4,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>Login | My Sticky Notes</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="auth-styles.css">
 </head>
 
 <body>
+
     <nav class="nav">
         <ul>
             <li><a href="index.html">Home</a></li>
-            <li><a href="login.html">logIn</a></li>
+            <li><a href="#" id="logoutBtn">Logout</a></li>
         </ul>
     </nav>
-    <header class="header">
-        <h1>LogIn</h1>
-    </header>
-    <div class="login">
-        <form action="script.js">
-            <input type="text" placeholder="Username">
-            <input type="password" placeholder="Password">
-            <button type="submit">LogIn</button>
-        </form>
+
+
+    <div class="auth-container">
+        <h1 id="formTitle">Log In</h1>
+
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+
+        <p id="authError" class="auth-error"></p>
+
+        <button id="submitBtn">Log In</button>
+
+        <p class="toggle-text">
+            <span id="toggleModeText">Don't have an account?</span>
+            <a href="#" id="toggleModeLink">Sign up</a>
+        </p>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="auth.js"></script>
 </body>
 
 </html>

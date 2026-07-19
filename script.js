@@ -7,6 +7,7 @@ const supabaseClient = window.supabase.createClient(
 );
 
 let editingId = null;
+let currentUser = null;
 
 const input = document.querySelector("#search");
 const grid = document.querySelector(".grid");
@@ -19,6 +20,23 @@ const closeBtn = document.querySelector("#closeBtn");
 const noteTitleInput = document.querySelector("#noteTitle");
 const noteContentInput = document.querySelector("#noteContent");
 const noteColorInput = document.querySelector("#noteColor");
+
+// --- Auth guard: redirect to login if not signed in ---
+async function requireAuth() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+
+    if (!session) {
+        window.location.href = "login.html";
+        return null;
+    }
+
+    return session.user;
+}
+
+async function logout() {
+    await supabaseClient.auth.signOut();
+    window.location.href = "login.html";
+}
 
 newNoteBtn.addEventListener("click", () => {
     editingId = null;
@@ -54,7 +72,8 @@ saveNoteBtn.addEventListener("click", async () => {
             title: title,
             content: content,
             date: new Date().toLocaleDateString(),
-            color: color
+            color: color,
+            user_id: currentUser.id   // tie the note to the logged-in user
         };
         const { error } = await supabaseClient
             .from("notes")
@@ -73,7 +92,12 @@ saveNoteBtn.addEventListener("click", async () => {
 async function renderNotes(searchTerm = "") {
     grid.innerHTML = "";
 
-    const { data, error } = await supabaseClient.from("notes").select("*");
+    // RLS will already restrict this to the current user's rows,
+    // but filtering explicitly here too is a good habit (defense in depth)
+    const { data, error } = await supabaseClient
+        .from("notes")
+        .select("*")
+        .eq("user_id", currentUser.id);
 
     if (error) {
         console.log("Fetch error:", error);
@@ -109,7 +133,7 @@ async function renderNotes(searchTerm = "") {
 
 grid.addEventListener("click", async (e) => {
     if (e.target.classList.contains("edit")) {
-        const id = e.target.dataset.id; 
+        const id = e.target.dataset.id;
         await editNote(id);
     }
 
@@ -120,23 +144,21 @@ grid.addEventListener("click", async (e) => {
 });
 
 async function deleteNote(id) {
-    console.log("Attempting to delete id:", id);
-    const { data, error } = await supabaseClient.from("notes").delete().eq("id", id);
-    console.log("Delete response:", { data, error });
-    if (error) {
-        alert("Delete failed: " + error.message);
-        return;
-    }
+    const { error } = await supabaseClient.from("notes").delete().eq("id", id);
+    if (error) console.log("Delete error:", error);
     await renderNotes();
 }
 
 async function editNote(id) {
-    console.log("Attempting to fetch id:", id);
-    const { data, error } = await supabaseClient.from("notes").select("*").eq("id", id).single();
-    console.log("Edit fetch response:", { data, error });
+    const { data, error } = await supabaseClient
+        .from("notes")
+        .select("*")
+        .eq("id", id)
+        .single();
 
     if (error || !data) {
-        alert("Note not found — check console for details: " + (error ? error.message : "no data"));
+        console.log("Edit fetch error:", error);
+        alert("Note not found");
         return;
     }
 
@@ -152,4 +174,10 @@ input.addEventListener("input", (e) => {
     renderNotes(searchTerm);
 });
 
-renderNotes();
+// --- Boot sequence ---
+(async () => {
+    currentUser = await requireAuth();
+    if (currentUser) {
+        await renderNotes();
+    }
+})();

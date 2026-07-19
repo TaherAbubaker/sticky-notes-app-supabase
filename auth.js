@@ -1,0 +1,103 @@
+const supabaseUrl = "https://wyfpcfzvylmjufambbyx.supabase.co";
+const supabaseKey = "sb_publishable_QanNdAoA_4FpDd2or0IM9w_AEKq0l-j";
+
+const supabaseClient = window.supabase.createClient(
+    supabaseUrl,
+    supabaseKey
+);
+
+const emailInput = document.querySelector("#email");
+const passwordInput = document.querySelector("#password");
+const submitBtn = document.querySelector("#submitBtn");
+const authError = document.querySelector("#authError");
+const formTitle = document.querySelector("#formTitle");
+const toggleModeText = document.querySelector("#toggleModeText");
+const toggleModeLink = document.querySelector("#toggleModeLink");
+
+let mode = "login"; // or "signup"
+
+// If already logged in, skip straight to notes
+(async () => {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session) {
+        window.location.href = "index.html";
+    }
+})();
+
+toggleModeLink.addEventListener("click", (e) => {
+    e.preventDefault();
+    authError.textContent = "";
+
+    if (mode === "login") {
+        mode = "signup";
+        formTitle.textContent = "Sign Up";
+        submitBtn.textContent = "Sign Up";
+        toggleModeText.textContent = "Already have an account?";
+        toggleModeLink.textContent = "Log in";
+    } else {
+        mode = "login";
+        formTitle.textContent = "Log In";
+        submitBtn.textContent = "Log In";
+        toggleModeText.textContent = "Don't have an account?";
+        toggleModeLink.textContent = "Sign up";
+    }
+});
+
+submitBtn.addEventListener("click", async () => {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+
+    authError.textContent = "";
+
+    if (email === "" || password === "") {
+        authError.textContent = "Please fill in both fields.";
+        return;
+    }
+
+    if (password.length < 6) {
+        authError.textContent = "Password must be at least 6 characters.";
+        return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Please wait...";
+
+    if (mode === "signup") {
+        const { data, error } = await supabaseClient.auth.signUp({
+            email,
+            password
+        });
+
+        if (error) {
+            authError.textContent = error.message;
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Sign Up";
+            return;
+        }
+
+        // If email confirmation is ON in Supabase settings, there's no session yet
+        if (!data.session) {
+            authError.textContent = "Check your email to confirm your account before logging in.";
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Sign Up";
+            return;
+        }
+
+        window.location.href = "index.html";
+
+    } else {
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
+            email,
+            password
+        });
+
+        if (error) {
+            authError.textContent = error.message;
+            submitBtn.disabled = false;
+            submitBtn.textContent = "Log In";
+            return;
+        }
+
+        window.location.href = "index.html";
+    }
+});
